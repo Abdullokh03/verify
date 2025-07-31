@@ -60,7 +60,7 @@ hwIDAQAB
 
       if (isValid && hash === hashFromUrl) {
         document.getElementById("result").textContent =
-          `✅ Подпись подтверждена!\nДокумент: ${data.info.doc_number}\nДата: ${data.info.date}\nПодписал: ${data.info.director}`;
+          "✅ Подпись подтверждена!";
       } else {
         document.getElementById("result").textContent = "❌ Подпись недействительна или данные подделаны.";
       }
