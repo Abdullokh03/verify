@@ -1,0 +1,10 @@
+{
+  "info": {
+    "issuer": "BIO TEX SERVICE BOSHQARUV M.CH.J",
+    "director": "Safarov Yadgar Normurodovich",
+    "doc_number": "BTX-2025-001",
+    "date": "2025-07-30"
+  },
+  "hash": "examplehash1234567890abcdef1234567890abcdef1234567890abcdef12345678",
+  "signature": "abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
+}
