@@ -21,7 +21,7 @@
       }
 
       const response = await fetch("signed_doc.json");
-      const data = await response.json();
+      const data = await signed_doc.json();
 
       const encoder = new TextEncoder();
       const hash = data.hash;
