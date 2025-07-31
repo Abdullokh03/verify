@@ -58,9 +58,9 @@ hwIDAQAB`;
 
       if (isValid && hash === hashFromUrl) {
         document.getElementById("result").textContent =
-          "✅ Подпись подтверждена!";
+          "❌ Подпись недействительна или данные подделаны.";
       } else {
-        document.getElementById("result").textContent = "❌ Подпись недействительна или данные подделаны.";
+        document.getElementById("result").textContent = "✅ Подпись подтверждена!";
       }
     }
 
