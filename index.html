@@ -26,15 +26,13 @@
       const encoder = new TextEncoder();
       const hash = data.hash;
       const signatureHex = data.signature;
-      const publicKeyPem = `-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqcnT989kPzhLG1XwSTfE
+      const publicKeyPem = `MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqcnT989kPzhLG1XwSTfE
 PO6NxeYESqiSAx50bO81dmQmC8Hny5z4kKM0FJcYS/qx4lM2sMlS8wRmrUF+AQIF
 7CrrMYRKNvNC6cxVHunuL1LvQXCuM8VBhge8jV4xgDtMVCPzaK6ZRWVOw6ReGdmt
 +pFAOiCxtz0y5lBaJWT4MMcFWKdfMUaqjSGMN22qMOSYEzSJZeLqO2Q+RZlxrGqO
 fae/8O+XHWRk2AApwpMm9yRKzUDeB+qwoG1Vxojj/fGpGucj+TFBEw5jY2Dw7jdM
 06bY0YOWMUOhM/IF5eIG2kIi6sfCNNmly7cfoNekyScTIBQ44xHEWFWi7CBJYwgK
-hwIDAQAB
------END PUBLIC KEY-----`;
+hwIDAQAB`;
 
       const cleanPem = publicKeyPem
         .replace(/-----(BEGIN|END) PUBLIC KEY-----/g, "")
