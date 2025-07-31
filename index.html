@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Проверка подлинности</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; }
+    #result { white-space: pre-wrap; background: #f2f2f2; padding: 1rem; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h2>Проверка подлинности документа</h2>
+  <div id="result">Загрузка...</div>
+
+  <script>
+    async function verifyDocument() {
+      const hashFromUrl = new URLSearchParams(window.location.search).get("data");
+      if (!hashFromUrl) {
+        document.getElementById("result").textContent = "Данный файл подписал Директор BIO TEX SERVICE BOSHQARUV MCHJ Сафаров Ядгар Нормуродович Ushbu faylni BIO TEX SERVICE BOSHQARUV MCHJ raxbari Safarov Yadgar Normurodovich tomonidan imzolangan";
+        return;
+      }
+
+      const response = await fetch("signed_doc.json");
+      const data = await response.json();
+
+      const encoder = new TextEncoder();
+      const hash = data.hash;
+      const signatureHex = data.signature;
+      const publicKeyPem = `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqcnT989kPzhLG1XwSTfE
+PO6NxeYESqiSAx50bO81dmQmC8Hny5z4kKM0FJcYS/qx4lM2sMlS8wRmrUF+AQIF
+7CrrMYRKNvNC6cxVHunuL1LvQXCuM8VBhge8jV4xgDtMVCPzaK6ZRWVOw6ReGdmt
++pFAOiCxtz0y5lBaJWT4MMcFWKdfMUaqjSGMN22qMOSYEzSJZeLqO2Q+RZlxrGqO
+fae/8O+XHWRk2AApwpMm9yRKzUDeB+qwoG1Vxojj/fGpGucj+TFBEw5jY2Dw7jdM
+06bY0YOWMUOhM/IF5eIG2kIi6sfCNNmly7cfoNekyScTIBQ44xHEWFWi7CBJYwgK
+hwIDAQAB
+-----END PUBLIC KEY-----`;
+
+      const cleanPem = publicKeyPem
+        .replace(/-----(BEGIN|END) PUBLIC KEY-----/g, "")
+        .replace(/\s+/g, "");
+      const binaryDer = Uint8Array.from(atob(cleanPem), c => c.charCodeAt(0));
+      const key = await crypto.subtle.importKey(
+        "spki",
+        binaryDer,
+        { name: "RSA-PSS", hash: "SHA-256" },
+        false,
+        ["verify"]
+      );
+
+      const isValid = await crypto.subtle.verify(
+        {
+          name: "RSA-PSS",
+          saltLength: 32
+        },
+        key,
+        hexToBytes(signatureHex),
+        encoder.encode(hash)
+      );
+
+      if (isValid && hash === hashFromUrl) {
+        document.getElementById("result").textContent =
+          `✅ Подпись подтверждена!\nДокумент: ${data.info.doc_number}\nДата: ${data.info.date}\nПодписал: ${data.info.director}`;
+      } else {
+        document.getElementById("result").textContent = "❌ Подпись недействительна или данные подделаны.";
+      }
+    }
+
+    function hexToBytes(hex) {
+      const bytes = [];
+      for (let c = 0; c < hex.length; c += 2) {
+        bytes.push(parseInt(hex.substr(c, 2), 16));
+      }
+      return new Uint8Array(bytes);
+    }
+
+    verifyDocument();
+  </script>
+</body>
+</html>
